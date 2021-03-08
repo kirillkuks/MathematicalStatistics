@@ -69,7 +69,7 @@ class CauchyDistribution(Distribution):
         return np.random.standard_cauchy(size)
 
     def density(self, x):
-        return 1 / np.pi * (1 / (x ** 2 + 1))
+        return (1 / np.pi) * (1 / (x ** 2 + 1))
 
     def get_name(self):
         return self.name
@@ -135,10 +135,11 @@ def main():
         for size in sizes:
             sample = distribution.create_sample(size)
             left, bins, right = histogram(sample)
-            plt.hist(sample, bins, density=True)
             x = np.linspace(left, right, 100)
-            y = gaussian_filter1d(distribution.density(x), sigma=3)
-            plt.plot(x, y, '--')
+            y = distribution.density(x)
+            plt.ylabel('Density')
+            plt.plot(x, y, linewidth=4.0, color='blue')
+            plt.hist(sample, bins, density=True, color='orange', edgecolor='black')
             plt.title(distribution.get_name() + '; Size = ' + str(size))
             plt.show()
 
