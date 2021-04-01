@@ -16,21 +16,30 @@ def init():
 
 def print_results(distribution, char_samples, size):
     print(distribution.get_name() + ": Size = " + str(size))
-    print("Mean:")
+    print('Mean: &', end='')
     for sample in char_samples:
-        print(str(Char.Characteristics.mean(sample.get_sample())), end="; ")
+        print(' $ ' + str(round(Char.Characteristics.mean(sample.get_sample()), 4)) + ' $ ', end='&')
     print()
-    print("Variance")
+    print('Variance: &', end='')
     for sample in char_samples:
-        print(str(Char.Characteristics.variance(sample.get_sample())), end="; ")
-    print("\n")
+        print(' $ ' + str(round(Char.Characteristics.variance(sample.get_sample()), 4)) + ' $ ', end='&')
+    print()
+    print('Max: &', end='')
+    for sample in char_samples:
+        print(' $ ' + str(round(Char.Characteristics.max(sample.get_sample()), 4)) + ' $ ', end='&')
+    print()
+    print('Min: &', end='')
+    for sample in char_samples:
+        print(' $ ' + str(round(Char.Characteristics.min(sample.get_sample()), 4)) + ' $ ', end='&')
+    print()
+    print('\n')
 
 
 def main():
     distributions, sizes, n = init()
     for distribution in distributions:
         for size in sizes:
-            char_samples = [Sample.Sample() for i in range(0, Char.Characteristics.number_of_characteristics())]
+            char_samples = [Sample.Sample() for _ in range(0, Char.Characteristics.number_of_characteristics())]
             for i in range(0, n):
                 characteristics = Char.Characteristics(distribution.create_sample(size))
                 chars = characteristics.get_characteristics()

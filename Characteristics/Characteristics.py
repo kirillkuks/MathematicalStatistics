@@ -59,4 +59,10 @@ class Characteristics:
         square_mean = Characteristics.mean(sample)
         return mean_square - square_mean * square_mean
 
+    @staticmethod
+    def max(sample):
+        return max(sample)
 
+    @staticmethod
+    def min(sample):
+        return min(sample)

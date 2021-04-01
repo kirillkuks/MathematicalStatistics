@@ -11,6 +11,7 @@ def boxplot(distributions, sizes):
             samples.append(sample)
         plt.boxplot(samples, vert=False, widths=0.5, labels=labels)
         plt.title(distribution.get_name())
+        plt.savefig('images/boxplot/' + distribution.get_name() + '.png')
         plt.show()
     return
 
