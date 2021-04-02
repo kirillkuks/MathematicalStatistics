@@ -1,4 +1,5 @@
 from correlation import Correlation
+from ellipse import Ellipse
 
 
 def init():
@@ -18,8 +19,7 @@ def print_correlation(sample, name, size, rho):
     print()
 
 
-def main():
-    sizes, n, correlations, mean, variance = init()
+def selective_correlation(sizes, n, correlations, mean, variance):
     correlation = Correlation()
     for size in sizes:
         for rho in correlations:
@@ -31,7 +31,24 @@ def main():
                 correlation_pearson_sample.append(Correlation.pearson_correlation(x, y))
                 correlation_square_sample.append(Correlation.square_correlation(x, y))
                 correlation_spearman_sample.append(Correlation.spearman_correlation(x, y))
-            print_correlation(correlation_spearman_sample, 'Spearman', size, rho)
+                ellipse = Ellipse(x, y)
+                ellipse.plot()
+            print_correlation(correlation_pearson_sample, 'Pearson', size, rho)
+
+
+def ellipses(sizes, correlations, mean, variance):
+    correlation = Correlation()
+    for size in sizes:
+        for rho in correlations:
+            x, y = correlation.multivariate_normal(mean, variance, rho, size)
+            ellipse = Ellipse(x, y, size, rho)
+            ellipse.plot()
+
+
+def main():
+    sizes, n, correlations, mean, variance = init()
+    selective_correlation(sizes, n, correlations, mean, variance)
+    ellipses(sizes, correlations, mean, variance)
     return 0
 
 

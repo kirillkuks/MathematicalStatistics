@@ -14,8 +14,8 @@ class Correlation:
         mean = [0, 0]
         cov1 = [[1, 0.9],
                 [0.9, 1]]
-        cov2 = [[10, -0.9],
-                [-0.9, 10]]
+        cov2 = [[10, -9],
+                [-9, 10]]
         return 0.9 * self.rng.multivariate_normal(mean, cov1, size).T +\
             0.1 * self.rng.multivariate_normal(mean, cov2, size).T
 
