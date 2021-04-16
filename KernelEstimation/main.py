@@ -1,6 +1,7 @@
 import Distributions as Dist
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.stats import gaussian_kde
 
 
 def init():
@@ -68,14 +69,15 @@ def empirical_density_function(distributions, sizes):
     for distribution in distributions:
         for size in sizes:
             sample = distribution.create_sample(size)
-            hn = distribution.hn(sample) / 2
+            kde = gaussian_kde(sample, bw_method='silverman')
+            hn = kde.factor / 2
             a, b = distribution.get_section()
 
             x = np.linspace(a, b, 100)
             y = distribution.density(x)
             for k in range(3):
-                ey = edenf(sample, x, hn)
-
+                kde = gaussian_kde(sample, bw_method=hn)
+                ey = kde.evaluate(x)
                 plt.title(distribution.get_name() + "; size = " + str(size))
                 axes = plt.gca()
                 axes.set_ylim([0, 1])

@@ -33,6 +33,15 @@ def print_results(distribution, char_samples, size):
         print(' $ ' + str(round(Char.Characteristics.min(sample.get_sample()), 4)) + ' $ ', end='&')
     print()
     print('\n')
+    # print('Max: &', end='')
+    # for sample in char_samples:
+    #     print(' $ ' + str(round(Char.Characteristics.mean(sample.get_sample()) - Char.Characteristics.variance(sample.get_sample()), 4)) + ' $ ', end='&')
+    # print()
+    # print('Min: &', end='')
+    # for sample in char_samples:
+    #     print(' $ ' + str(round(Char.Characteristics.mean(sample.get_sample()) + Char.Characteristics.variance(sample.get_sample()), 3)) + ' $ ', end='&')
+    # print()
+    # print('\n')
 
 
 def main():

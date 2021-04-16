@@ -33,8 +33,10 @@ def plot(x, y, func, params, name):
 def calculate_regression(x, y, function, name):
     regression = Regression(x, y)
     a1, b1 = regression.least_squares_regression()
+    print('Square')
     print(a1, b1)
     a2, b2 = regression.least_absolute_regression()
+    print('Absolute')
     print(a2, b2)
     plot(x, y, function, [[a1, b1], [a2, b2]], name)
 

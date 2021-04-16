@@ -16,8 +16,18 @@ class Correlation:
                 [0.9, 1]]
         cov2 = [[10, -9],
                 [-9, 10]]
-        return 0.9 * self.rng.multivariate_normal(mean, cov1, size).T +\
-            0.1 * self.rng.multivariate_normal(mean, cov2, size).T
+        x, y = [], []
+        x1, y1 = self.rng.multivariate_normal(mean, cov1, size).T
+        x2, y2 = self.rng.multivariate_normal(mean, cov2, size).T
+        indexes = self.rng.choice(2, size=size, p=[0.9, 0.1])
+        for i in range(size):
+            if indexes[i] == 0:
+                x.append(x1[i])
+                y.append(y1[i])
+            else:
+                x.append(x2[i])
+                y.append(y2[i])
+        return x, y
 
     @staticmethod
     def mean(sample):

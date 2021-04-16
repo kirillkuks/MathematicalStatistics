@@ -19,6 +19,19 @@ def print_correlation(sample, name, size, rho):
     print()
 
 
+def print_correlations(samples, size, rho):
+    print('size = ' + str(size) + ', rho = ' + str(rho))
+    for sample in samples:
+        print(' $ ' + str(round(Correlation.mean(sample), 4)) + ' $ ', end='&')
+    print()
+    for sample in samples:
+        print(' $ ' + str(round(Correlation.square_mean(sample), 4)) + ' $ ', end='&')
+    print()
+    for sample in samples:
+        print(' $ ' + str(round(Correlation.variance(sample), 4)) + ' $ ', end='&')
+    print()
+
+
 def selective_correlation(sizes, n, correlations, mean, variance):
     correlation = Correlation()
     for size in sizes:
@@ -30,10 +43,24 @@ def selective_correlation(sizes, n, correlations, mean, variance):
                 x, y = correlation.multivariate_normal(mean, variance, rho, size)
                 correlation_pearson_sample.append(Correlation.pearson_correlation(x, y))
                 correlation_square_sample.append(Correlation.square_correlation(x, y))
-                correlation_spearman_sample.append(Correlation.spearman_correlation(x, y))
-                ellipse = Ellipse(x, y)
-                ellipse.plot()
-            print_correlation(correlation_pearson_sample, 'Pearson', size, rho)
+            correlation_spearman_sample.append(Correlation.spearman_correlation(x, y))
+            print_correlations([correlation_pearson_sample,
+                                correlation_spearman_sample,
+                                correlation_square_sample],
+                               size, rho)
+    for size in sizes:
+        correlation_pearson_sample = []
+        correlation_square_sample = []
+        correlation_spearman_sample = []
+        for _ in range(0, n):
+            x, y = correlation.mixed_multivariate_normal(size)
+            correlation_pearson_sample.append(Correlation.pearson_correlation(x, y))
+            correlation_square_sample.append(Correlation.square_correlation(x, y))
+            correlation_spearman_sample.append(Correlation.spearman_correlation(x, y))
+        print_correlations([correlation_pearson_sample,
+                            correlation_spearman_sample,
+                            correlation_square_sample],
+                           size, -1)
 
 
 def ellipses(sizes, correlations, mean, variance):
@@ -47,11 +74,10 @@ def ellipses(sizes, correlations, mean, variance):
 
 def main():
     sizes, n, correlations, mean, variance = init()
-    selective_correlation(sizes, n, correlations, mean, variance)
+    # selective_correlation(sizes, n, correlations, mean, variance)
     ellipses(sizes, correlations, mean, variance)
     return 0
 
 
 if __name__ == '__main__':
-    Correlation.spearman_correlation([4, 5, 1, 3, 5, 11], [5, 6, 1, 5, 6, 6])
     main()

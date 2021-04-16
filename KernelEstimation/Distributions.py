@@ -41,13 +41,13 @@ class Distribution(ABC):
         mean = Distribution.mean(sample)
         for elem in sample:
             var += (elem - mean) ** 2
-        return var / len(sample)
+        return var / (len(sample) - 1)
 
     @staticmethod
     def hn(sample):
         var = Distribution.var(sample)
         deviation = np.sqrt(var)
-        return 1.06 * deviation * (len(sample) ** (- 1 / 5))
+        return 1.06 * deviation / (len(sample) ** (1 / 5))
 
     @staticmethod
     def kernel(u):
@@ -103,7 +103,7 @@ class LaplaceDistribution(Distribution):
         return np.random.laplace(loc, scale, size)
 
     def cumulative(self, x):
-        a = 1 / np.sqrt(2)
+        a = np.sqrt(2)
         return [1 / 2 * np.exp(a * elem) if elem <= 0 else 1 - 1 / 2 * np.exp(- a * elem) for elem in x]
 
     def density(self, x):
