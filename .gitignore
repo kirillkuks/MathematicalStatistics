@@ -22,3 +22,6 @@
 
 /Hypothesis/venv
 /Hypothesis/__pycache__
+
+/ConfidenceInterval/venv
+/ConfidenceInterval/__pycache__
