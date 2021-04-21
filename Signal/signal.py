@@ -62,7 +62,7 @@ class Signal:
         plt.show()
 
     def plot_signal_hist(self):
-        number_of_intervals = int(1.72 * (self.size ** (1 / 3)))
+        number_of_intervals = int(np.log2(len(self.signal_data) + 1))
         self.hist_data = plt.hist(self.signal_data, bins=number_of_intervals)
         plt.savefig('images/Histogram.png')
         plt.show()
@@ -71,8 +71,8 @@ class Signal:
         self.filtered_signal = self.signal_data
         self.filtered_signal = self.signal_data
         for i in range(1, self.size - 1):
-            mean = (self.signal_data[i - 1] + self.signal_data[i + 1]) / 2
-            if mean < self.filtered_signal[i]:
+            mean = (self.filtered_signal[i - 1] + self.filtered_signal[i + 1]) / 2
+            if np.abs(mean) < np.abs(self.filtered_signal[i]):
                 self.filtered_signal[i] = mean
 
     def define_sections(self):
@@ -126,20 +126,27 @@ class Signal:
 
     @staticmethod
     def number_of_splitting(size: int):
-        return int(1.72 * (size ** (1 / 3)))
+        k = s = size
+        while k > 10:
+            k = 4
+            while size % k != 0:
+                k += 1
+                if k > 10:
+                    break
+            size -= 1
+        return k, size if s == size else size + 1
 
     @staticmethod
     def _intar_group(sample: [], k: int):
         size = len(sample)
         delta = int(size / k)
-        delta1 = int(delta + size % k)
 
         inter = 0
-        inter += Signal.variance(sample[:delta1])
 
-        left = delta1
-        for i in range(1, k):
-            inter += Signal.variance(sample[left:left + delta])
+        left = 0
+        for i in range(0, k):
+            sub_sample = sample[left:left + delta]
+            inter += Signal.variance(sub_sample) * (len(sub_sample) - 1) / (k - 1)
             left += delta
 
         return inter / k
@@ -148,21 +155,19 @@ class Signal:
     def _inter_group(sample: [], k: int):
         size = len(sample)
         delta = int(size / k)
-        delta1 = int(delta + size % k)
-
-        means = [Signal.mean(sample[:delta1])]
-
-        left = delta1
-        for i in range(1, k):
-            means.append(Signal.mean(sample[left:left + delta]))
+        means = [0.0 for _ in range(k)]
+        left = 0
+        for i in range(0, k):
+            means[i] = (Signal.mean(sample[left:left + delta]))
             left += delta
 
         return Signal.variance(means) * k
 
     def _fisher(self, left, right):
-        sample = self.filtered_signal[left:right + 1]
         size = right - left + 1
-        k = Signal.number_of_splitting(size)
+        k, size = Signal.number_of_splitting(size)
+        print(k)
+        sample = self.filtered_signal[left:left + size]
         intar = Signal._intar_group(sample, k)
         inter = Signal._inter_group(sample, k)
         return inter / intar

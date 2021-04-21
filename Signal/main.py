@@ -3,23 +3,16 @@ import sys
 from signal import Signal
 
 
-def first_n_numbers(string: str, size: int):
-    i = 0
-    number_counter = 0
-    while number_counter != size and i < len(string):
-        i += 1
-        if string[i] == ' ':
-            number_counter += 1
-    substring = string[:i]
-    substring = substring.replace(',', '').replace('[', '')
-    return substring.split(' ')
+def get_signal(string: str, size: int, index: int):
+    signals = string.replace(',', '').replace('[', '').replace(']', '')
+    signal_data = signals.split(' ')
+    return [float(x) for x in signal_data[size * index: size * (index + 1)]]
 
 
 def read_signal(filename: str, size: int):
     with open(filename, 'r') as fin:
         line = fin.readline()
-        signal_data = first_n_numbers(line, size)
-    return [float(x) for x in signal_data]
+        return get_signal(line, size, 0)
 
 
 def main(argv: []):
@@ -28,11 +21,12 @@ def main(argv: []):
 
         signal = Signal(signal_data)
 
-        # signal.plot_signal_data()
+        signal.plot_signal_data()
         signal.plot_signal_hist()
 
         signal.apply_median_filter()
-        # signal.plot_filtered_signal_data()
+
+        signal.plot_filtered_signal_data()
 
         signal.define_sections()
         signal.plot_data_signal_with_regions()
