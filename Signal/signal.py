@@ -62,7 +62,7 @@ class Signal:
         plt.show()
 
     def plot_signal_hist(self):
-        number_of_intervals = int(np.log2(len(self.signal_data) + 1))
+        number_of_intervals = int(1.72 * (self.size ** (1 / 3)))
         self.hist_data = plt.hist(self.signal_data, bins=number_of_intervals)
         plt.savefig('images/Histogram.png')
         plt.show()
@@ -127,7 +127,7 @@ class Signal:
     @staticmethod
     def number_of_splitting(size: int):
         k = s = size
-        while k > 10:
+        while k > 8:
             k = 4
             while size % k != 0:
                 k += 1
